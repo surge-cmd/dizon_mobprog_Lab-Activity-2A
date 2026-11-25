@@ -9,6 +9,7 @@ class NewsfeedCard extends StatefulWidget {
   final String date;
   final int numOfLikes;
   final bool hasImage;
+  final bool showImagePlaceholder;
   final String? imagePath;
   final String? avatarPath;
 
@@ -19,6 +20,7 @@ class NewsfeedCard extends StatefulWidget {
     required this.date,
     this.numOfLikes = 0,
     this.hasImage = false,
+    this.showImagePlaceholder = false,
     this.imagePath = 'assets/images/iron_man.jpg',
     this.avatarPath,
   });
@@ -49,21 +51,56 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
         widget.avatarPath != null && widget.avatarPath!.isNotEmpty;
     return CircleAvatar(
       radius: radius,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: appLightPrimary.withValues(alpha: 0.35),
       backgroundImage: hasAsset ? AssetImage(widget.avatarPath!) : null,
       child: !hasAsset
           ? Icon(
               Icons.person,
               size: radius * 1.15,
-              color: Colors.grey[800],
+              color: appDarkPrimary,
             )
           : null,
     );
   }
 
   Widget _buildPostImage() {
-    if (!widget.hasImage) {
+    if (!widget.hasImage && !widget.showImagePlaceholder) {
       return const SizedBox.shrink();
+    }
+
+    if (widget.showImagePlaceholder) {
+      return Padding(
+        padding: EdgeInsets.only(
+          top: ScreenUtil().setHeight(6),
+          bottom: ScreenUtil().setHeight(6),
+        ),
+        child: Container(
+          width: double.infinity,
+          height: ScreenUtil().setHeight(180),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            border: Border.all(color: Colors.grey[400]!),
+            borderRadius: BorderRadius.circular(ScreenUtil().setSp(6)),
+          ),
+          child: CustomPaint(
+            painter: _CrossPlaceholderPainter(color: Colors.grey[400]!),
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil().setWidth(10),
+                  vertical: ScreenUtil().setHeight(4),
+                ),
+                color: Colors.white.withValues(alpha: 0.9),
+                child: CustomText(
+                  text: 'Media Placeholder',
+                  fontSize: ScreenUtil().setSp(11),
+                  color: Colors.grey[700]!,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
     }
 
     return Padding(
@@ -113,7 +150,6 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Enhancement 2: Avatar + User Name + Date + Globe + More icon
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -153,28 +189,20 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
                 ),
               ],
             ),
-
             SizedBox(height: ScreenUtil().setHeight(8)),
-
-            // Post text
             CustomText(
               text: widget.postContent,
               fontSize: ScreenUtil().setSp(12),
               color: Colors.black87,
             ),
-
-            // Enhancement 1: Conditional Image widget
             _buildPostImage(),
-
             SizedBox(height: ScreenUtil().setHeight(8)),
-
-            // Likes count row (disregarding reaction icons per instruction)
             Row(
               children: [
                 Icon(
                   Icons.thumb_up,
                   size: ScreenUtil().setSp(13),
-                  color: fbPrimary,
+                  color: appPrimary,
                 ),
                 SizedBox(width: ScreenUtil().setWidth(5)),
                 CustomText(
@@ -184,18 +212,15 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
                 ),
               ],
             ),
-
             SizedBox(height: ScreenUtil().setHeight(4)),
             Divider(height: ScreenUtil().setHeight(10), color: Colors.grey[300]),
-
-            // Enhancement 3: Widget-based Like, Comment, and Share buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton.icon(
                   onPressed: _toggleLike,
                   style: TextButton.styleFrom(
-                    foregroundColor: _isLiked ? fbPrimary : Colors.grey[700],
+                    foregroundColor: _isLiked ? appPrimary : Colors.grey[700],
                     padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(8),
                     ),
@@ -203,12 +228,12 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
                   icon: Icon(
                     Icons.thumb_up_alt_outlined,
                     size: ScreenUtil().setSp(15),
-                    color: _isLiked ? fbPrimary : Colors.grey[700],
+                    color: _isLiked ? appPrimary : Colors.grey[700],
                   ),
                   label: CustomText(
                     text: 'Like',
                     fontSize: ScreenUtil().setSp(12),
-                    color: _isLiked ? fbPrimary : Colors.grey[700]!,
+                    color: _isLiked ? appPrimary : Colors.grey[700]!,
                   ),
                 ),
                 TextButton.icon(
@@ -251,10 +276,7 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
                 ),
               ],
             ),
-
             SizedBox(height: ScreenUtil().setHeight(4)),
-
-            // Comment input bar matching the diagram
             Row(
               children: [
                 _buildAvatar(radius: ScreenUtil().setSp(13)),
@@ -301,10 +323,7 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
                 ),
               ],
             ),
-
             SizedBox(height: ScreenUtil().setHeight(8)),
-
-            // "View all comments" footer matching the reference screen
             CustomText(
               text: 'View all comments',
               fontSize: ScreenUtil().setSp(12),
@@ -315,5 +334,25 @@ class _NewsfeedCardState extends State<NewsfeedCard> {
         ),
       ),
     );
+  }
+}
+
+class _CrossPlaceholderPainter extends CustomPainter {
+  final Color color;
+
+  _CrossPlaceholderPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.2;
+    canvas.drawLine(Offset.zero, Offset(size.width, size.height), paint);
+    canvas.drawLine(Offset(size.width, 0), Offset(0, size.height), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _CrossPlaceholderPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }

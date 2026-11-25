@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dizon_mobprog/constants.dart';
 import 'package:dizon_mobprog/screens/newsfeed_screen.dart';
+import 'package:dizon_mobprog/screens/notification_screen.dart';
 import 'package:dizon_mobprog/widgets/custom_text.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
+
+  static const String _appName = 'PulseFeed';
+
+  static const List<String> _appBarTitles = [
+    _appName,
+    'Notifications',
+    'Profile',
+  ];
 
   void _onTappedBar(int value) {
     setState(() {
@@ -30,17 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentTitle = _appBarTitles[_selectedIndex];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        shadowColor: fbTextColorWhite,
+        shadowColor: appTextColorWhite,
         elevation: 2,
         title: CustomText(
-          text: 'Facebook',
-          fontSize: ScreenUtil().setSp(25),
-          color: fbPrimary,
+          text: currentTitle,
+          fontSize: ScreenUtil().setSp(22),
+          color: appPrimary,
           fontFamily: 'Klavika',
           fontWeight: FontWeight.w700,
         ),
@@ -49,11 +60,30 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _pageController,
         children: const <Widget>[
           NewsfeedScreen(),
+          NotificationScreen(),
           Center(
-            child: CustomText(
-              text: 'Notifications',
-              fontSize: 18,
-              color: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: appLightPrimary,
+                  child: Icon(Icons.person, size: 38, color: appDarkPrimary),
+                ),
+                SizedBox(height: 12),
+                CustomText(
+                  text: 'Evan Dizon',
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(height: 4),
+                CustomText(
+                  text: '$_appName Member • ID: 2024-1009856',
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+              ],
             ),
           ),
         ],
@@ -65,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
         showUnselectedLabels: false,
         showSelectedLabels: false,
         onTap: _onTappedBar,
@@ -77,8 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.notifications),
             label: 'Notifications',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
-        selectedItemColor: fbPrimary,
+        selectedItemColor: appPrimary,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedIndex,
       ),
