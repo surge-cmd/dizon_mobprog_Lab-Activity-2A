@@ -43,7 +43,7 @@ class NewsfeedScreen extends StatelessWidget {
       imagePath: 'assets/images/iron_man.jpg',
     ),
     PostItem(
-      userName: 'Evan Dizon',
+      userName: 'Ivan Dizon',
       postContent: 'Testing our PulseFeed modular layout and list widgets. #MobileProg',
       date: 'November 25, 2026',
       numOfLikes: 48,
@@ -51,7 +51,7 @@ class NewsfeedScreen extends StatelessWidget {
       showImagePlaceholder: false,
     ),
     PostItem(
-      userName: 'Kim Hailey Ozela',
+      userName: 'Kim Bailey Bozela',
       postContent: 'Designing clean UI components and layouts today! #UIDesign',
       date: 'November 24, 2026',
       numOfLikes: 124,
@@ -59,7 +59,7 @@ class NewsfeedScreen extends StatelessWidget {
       showImagePlaceholder: true,
     ),
     PostItem(
-      userName: 'Benedict Pascua',
+      userName: 'BenedicK Pascual',
       postContent: 'Git commits and component refactoring done for the sprint. #DevLog',
       date: 'November 23, 2026',
       numOfLikes: 67,

@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
-  static const String _appName = 'PulseFeed';
+  static const String _appName = 'Facebook';
 
   static const List<String> _appBarTitles = [
     _appName,

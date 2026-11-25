@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dizon_mobprog/screens/home_screen.dart';
 import 'package:dizon_mobprog/screens/newsfeed_screen.dart';
+import 'package:dizon_mobprog/screens/notification_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -20,7 +21,7 @@ class MainApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "Facebook Replication",
+          title: "Facebook",
           locale: const Locale('en', 'US'),
           supportedLocales: const [
             Locale('en', 'US'),
@@ -33,6 +34,7 @@ class MainApp extends StatelessWidget {
           initialRoute: "/home",
           routes: {
             "/newsfeed": (context) => const NewsfeedScreen(),
+            "/notifications": (context) => const NotificationScreen(),
             "/home": (context) => const HomeScreen(),
           },
         );
